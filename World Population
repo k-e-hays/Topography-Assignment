@@ -1,0 +1,17 @@
+import geopandas
+import pandas as pd
+from shapely.geometry import Point
+import matplotlib as mp
+import seaborn as sns
+import matplotlib.pyplot as plt
+import descartes
+
+
+world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres')) #imports world data
+world.head() #header
+world = world[(world.pop_est>0) & (world.name!="Antarctica")] #removes antartica
+world['gdp_per_cap'] = world.gdp_md_est / world.pop_est #gets population
+fig, ax = plt.subplots(1, 1) #subplot
+world.plot(column='pop_est',ax=ax, legend=True, legend_kwds={'label': "Population by Country”, 'orientation': "horizontal"}, cmap = 'CMRmap_r') #prints population
+plt.show() #shows plot
+plt.savefig('World Population.png', bbox_inches='tight');  # saves figure
