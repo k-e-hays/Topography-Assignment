@@ -1,0 +1,41 @@
+import geopandas
+import shapely
+
+
+def main():
+
+    import pandas as pd
+    import numpy as np
+    import geopandas
+    from shapely.geometry import Point
+    import matplotlib as mp
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    import descartes
+
+    country = geopandas.read_file('gz_2010_us_040_00_5m.json') #read file
+    shapely.geometry.multipolygon.MultiPolygon #shapely
+    florence = pd.read_csv('florence.csv') #read file
+    florence = florence.drop(['AdvisoryNumber', 'Forecaster', 'Received'], axis=1) #drops unneeded 
+    florence['Long'] = 0 - florence['Long'] #longitude
+    florence['coordinates'] = florence[['Long', 'Lat']].values.tolist() #long and lat
+    florence['coordinates'] = florence['coordinates'].apply(Point) #applies coordinates
+    florence = geopandas.GeoDataFrame(florence, geometry='coordinates') #geopandas
+    type(florence['coordinates'])
+    florence[florence['Name'] == 'Six'] 
+    florence.groupby('Name').Type.count() #groups by 6
+    fig, ax = plt.subplots(1, figsize=(20, 20)) #size of plot
+    base = country[country['NAME'].isin(['Alaska', 'Hawaii'])==False].plot(ax=ax, color='#3B3C6E') #plots country without Hawaii and Alaska
+    florence.plot(ax=base, column='Wind', marker="<", markersize=10, cmap='cool', label="Wind speed(mph)", legend = True) #map with markers
+    _ = ax.axis('off') #removes axis 
+    plt.legend() #prints legend
+    ax.set_title("Hurricane Florence in US Map", fontsize=25) #title
+    plt.savefig('Hurricane_footage.png', bbox_inches='tight'); #saves figure
+
+    plt.show()
+
+
+
+
+if __name__ == "__main__":
+    main() #main method
